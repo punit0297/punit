@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LORD PUNIT | Creator Agency & Gaming</title>
-    <link rel="icon" type="image/png" href="logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
     
     <style>
         :root {
@@ -28,7 +30,10 @@
             overflow-x: hidden;
         }
 
-        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* --- VANTA CANVAS --- */
+        #vanta-canvas { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+        }
 
         nav {
             position: fixed; top: 0; width: 100%; height: 80px;
@@ -49,7 +54,7 @@
         }
         .nav-links a:hover { color: var(--accent); transform: scale(1.1); }
 
-        #home {
+        header#home {
             height: 100vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
             padding: 0 20px;
@@ -85,23 +90,21 @@
         .section-title { font-family: 'Lexend'; font-size: 3rem; margin-bottom: 60px; text-transform: uppercase; }
         .section-title span { color: var(--accent); }
 
-        /* --- About Grid Matter --- */
         .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .about-text { font-size: 1.25rem; color: var(--text-dim); line-height: 1.8; }
         .about-text strong { color: var(--accent); }
 
-        /* --- Project Grid Matter --- */
         .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
         .card {
             background: var(--bg-card); padding: 50px 40px; border: 1px solid #111;
             transition: var(--transition); border-radius: 4px; position: relative; overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         .card:hover { transform: translateY(-20px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 25px; display: block; }
         .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
         .tag { color: var(--accent); font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; display: block; margin-bottom: 10px; }
 
-        /* --- Skills Grid Matter --- */
         .skill-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .skill-box {
             background: var(--bg-card); padding: 40px; text-align: center;
@@ -113,17 +116,29 @@
         .reveal { opacity: 0; transform: translateY(60px); transition: 1s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        footer { padding: 80px 10% 40px; text-align: center; border-top: 1px solid #111; }
+        footer { padding: 80px 10% 40px; text-align: center; border-top: 1px solid #111; background: #000; }
         .socials { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
         .socials a { color: var(--text-dim); font-size: 2rem; transition: 0.3s; }
         .socials a:hover { color: var(--accent); transform: translateY(-10px); }
+
+        /* --- Overlay --- */
+        #enter-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; cursor: pointer; transition: 0.8s;
+        }
 
         @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <div id="vanta-canvas"></div>
+
+    <div id="enter-overlay">
+        <h2 style="font-family: 'Lexend'; color: #fff; letter-spacing: 5px; font-weight: 900;">LORD PUNIT</h2>
+        <p style="color: var(--accent); font-size: 0.75rem; margin-top: 15px; font-weight: bold; letter-spacing: 2px;">[ CLICK TO ENTER EMPIRE ]</p>
+    </div>
 
     <nav>
         <a href="#home" class="logo">LORD <span>PUNIT</span></a>
@@ -204,21 +219,15 @@
         </div>
     </section>
 
-    <div id="enter-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
-    <img src="logo.jpg" style="width: 120px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--primary-green));">
-    <h2 style="font-family: 'Oswald'; color: #fff; letter-spacing: 3px;">CLICK TO ENTER</h2>
-    <p style="color: var(--primary-green); font-size: 0.7rem; margin-top: 10px; font-weight: bold;">[ MUSIC WILL ENABLE ]</p>
-</div>
+    <div id="music-control" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; display: none;">
+        <button onclick="toggleMute()" id="mute-btn" style="background: rgba(0,0,0,0.8); border: 1px solid var(--accent); color: var(--accent); padding: 12px; border-radius: 50%; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--accent-glow);">
+            <i id="mute-icon" class="fas fa-volume-up"></i>
+        </button>
+    </div>
 
-<div id="music-control" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; display: none;">
-    <button onclick="toggleMute()" id="mute-btn" style="background: rgba(0,0,0,0.8); border: 1px solid var(--primary-green); color: var(--primary-green); padding: 12px; border-radius: 50%; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow-shadow);">
-        <i id="mute-icon" class="fas fa-volume-up"></i>
-    </button>
-</div>
-
-<audio id="bg-music" loop>
-    <source src="ReelAudio-33862.mp3" type="audio/mpeg">
-</audio>
+    <audio id="bg-music" loop>
+        <source src="ReelAudio-33862.mp3" type="audio/mpeg">
+    </audio>
 
     <footer>
         <div class="socials">
@@ -226,23 +235,26 @@
             <a href="https://www.instagram.com/lord_punit_official/"><i class="fab fa-instagram"></i></a>
             <a href="https://discord.gg/7SwrAJDxWF"><i class="fab fa-discord"></i></a>
         </div>
-        <p style="color: var(--text-gray); font-size: 0.9rem;">&copy; 2026 LORD PUNIT | All Rights Reserved.</p>
+        <p style="color: var(--text-dim); font-size: 0.9rem;">&copy; 2026 LORD PUNIT | All Rights Reserved.</p>
     </footer>
 
     <script>
-        // --- Particles System ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        class Particle {
-            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.5; this.speedY = Math.random() * 0.5 + 0.2; }
-            update() { this.y += this.speedY; if (this.y > canvas.height) this.y = 0; }
-            draw() { ctx.fillStyle = 'rgba(255, 215, 0, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
-        }
-        function populate() { for(let i=0; i<100; i++) particles.push(new Particle()); }
-        function animate() { ctx.clearRect(0,0,canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
-        init(); populate(); animate();
+        // --- Vanta Background Init ---
+        VANTA.NET({
+            el: "#vanta-canvas",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0xffd700,
+            backgroundColor: 0x0,
+            points: 10.00,
+            maxDistance: 20.00,
+            spacing: 16.00
+        });
 
         // --- Reveal System ---
         window.addEventListener('scroll', () => {
@@ -251,20 +263,26 @@
             });
         });
 
-        // --- Music Logic ---
+        // --- Music & Overlay Logic ---
         const music = document.getElementById('bg-music');
         const overlay = document.getElementById('enter-overlay');
+        const control = document.getElementById('music-control');
+
         overlay.addEventListener('click', () => {
-            music.play();
-            overlay.style.display = 'none';
-            document.getElementById('music-control').style.display = 'block';
+            music.play().catch(e => console.log("Blocked"));
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                control.style.display = 'block';
+            }, 800);
         });
+
         function toggleMute() {
             music.muted = !music.muted;
             document.getElementById('mute-icon').className = music.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         }
 
-        // --- GMAIL REDIRECT LOGIC ---
+        // --- Gmail Redirect Logic ---
         document.getElementById('lordPunitForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('senderName').value;
@@ -278,5 +296,4 @@
         });
     </script>
 </body>
-
 </html>
