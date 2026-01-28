@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LORD PUNIT | Creator Agency & Gaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-black: #000000;
+            --bg-card: #0a0a0a;
+            --accent: #FFD700;
+            --accent-glow: rgba(255, 215, 0, 0.4);
+            --text-white: #ffffff;
+            --text-dim: #b3b3b3;
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --primary-green: #FFD700; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { 
+            background-color: var(--bg-black); 
+            color: var(--text-white); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+        }
+
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        nav {
+            position: fixed; top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 8%; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .logo { font-family: 'Lexend'; font-size: 1.6rem; font-weight: 900; color: white; text-decoration: none; }
+        .logo span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
+
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-dim);
+            font-weight: 700; font-size: 0.8rem; letter-spacing: 2px;
+            transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--accent); transform: scale(1.1); }
+
+        #home {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-h1 {
+            font-family: 'Lexend'; font-size: clamp(3.5rem, 12vw, 8rem);
+            font-weight: 900; letter-spacing: -3px; line-height: 1;
+            background: linear-gradient(to bottom, #fff 40%, var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: heroReveal 1.5s ease-out;
+        }
+
+        @keyframes heroReveal {
+            from { opacity: 0; transform: scale(0.8) translateY(50px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .hero-sub {
+            color: var(--accent); font-weight: 800; letter-spacing: 6px;
+            text-transform: uppercase; margin: 20px 0 40px; font-size: 1rem;
+        }
+
+        .btn {
+            padding: 20px 40px; border-radius: 4px; text-decoration: none;
+            font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+            transition: var(--transition); display: inline-block; cursor: pointer; border: none;
+        }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 20px 40px var(--accent-glow); }
+
+        section { padding: 120px 10%; position: relative; }
+        .section-title { font-family: 'Lexend'; font-size: 3rem; margin-bottom: 60px; text-transform: uppercase; }
+        .section-title span { color: var(--accent); }
+
+        /* --- About Grid Matter --- */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-text { font-size: 1.25rem; color: var(--text-dim); line-height: 1.8; }
+        .about-text strong { color: var(--accent); }
+
+        /* --- Project Grid Matter --- */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .card {
+            background: var(--bg-card); padding: 50px 40px; border: 1px solid #111;
+            transition: var(--transition); border-radius: 4px; position: relative; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-20px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+        .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 25px; display: block; }
+        .card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .tag { color: var(--accent); font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; display: block; margin-bottom: 10px; }
+
+        /* --- Skills Grid Matter --- */
+        .skill-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .skill-box {
+            background: var(--bg-card); padding: 40px; text-align: center;
+            border: 1px solid #111; transition: var(--transition);
+        }
+        .skill-box:hover { background: #111; border-color: var(--accent); transform: scale(1.05); }
+        .skill-box i { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+
+        .reveal { opacity: 0; transform: translateY(60px); transition: 1s all ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        footer { padding: 80px 10% 40px; text-align: center; border-top: 1px solid #111; }
+        .socials { display: flex; justify-content: center; gap: 40px; margin-bottom: 30px; }
+        .socials a { color: var(--text-dim); font-size: 2rem; transition: 0.3s; }
+        .socials a:hover { color: var(--accent); transform: translateY(-10px); }
+
+        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav>
+        <a href="#home" class="logo">LORD <span>PUNIT</span></a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Ventures</a></li>
+            <li><a href="#skills">Expertise</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <h1 class="hero-h1">LORD PUNIT</h1>
+        <p class="hero-sub">Creator • Gaming Network Manager • Strategist</p>
+        <a href="#projects" class="btn btn-primary">Enter the Empire</a>
+    </header>
+
+    <section id="about" class="reveal">
+        <div class="about-grid">
+            <div>
+                <h2 class="section-title">Visionary <span>Leader</span></h2>
+                <div class="about-text">
+                    <p>Building massive digital ecosystems in the gaming world. I specialize in turning creative ideas into scalable, <strong>revenue-generating platforms</strong>.</p>
+                    <br>
+                    <p>As an expert in <strong>Creator Agency Strategy</strong> and <strong>Gaming Network Operations</strong>, my mission is to elevate the digital experience for players and creators alike.</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <i class="fas fa-crown" style="font-size: 15rem; color: #0a0a0a; text-shadow: 0 0 30px rgba(255,215,0,0.15);"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="reveal">
+        <h2 class="section-title">Core <span>Projects</span></h2>
+        <div class="project-grid">
+            <div class="card">
+                <span class="tag">CREATOR AGENCY</span>
+                <i class="fas fa-users-viewfinder"></i>
+                <h3>Vireon Agency</h3>
+                <p>Expert management and brand strategy for digital creators. We help talent scale their influence and professionalize their business model through dedicated support.</p>
+            </div>
+            <div class="card">
+                <span class="tag">GAMING NETWORK</span>
+                <i class="fas fa-server"></i>
+                <h3>FNX Network</h3>
+                <p>A premier gaming network focused on community-driven Minecraft experiences. Engineered for high performance and massive player engagement.</p>
+            </div>
+            <div class="card">
+                <span class="tag">STRATEGY</span>
+                <i class="fas fa-chart-line"></i>
+                <h3>Digital Ecosystems</h3>
+                <p>Consulting and building high-growth digital assets. From Discord automation to complex network infrastructures in the gaming niche.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="reveal">
+        <h2 class="section-title">Elite <span>Expertise</span></h2>
+        <div class="skill-list">
+            <div class="skill-box"><i class="fas fa-chess-knight"></i><h3>Agency Strategy</h3></div>
+            <div class="skill-box"><i class="fas fa-code-branch"></i><h3>Network Dev</h3></div>
+            <div class="skill-box"><i class="fas fa-up-right-from-square"></i><h3>Brand Growth</h3></div>
+            <div class="skill-box"><i class="fas fa-shield-halved"></i><h3>Leadership</h3></div>
+        </div>
+    </section>
+
+    <section id="contact" class="reveal">
+        <h2 class="section-title" style="text-align:center;">Work <span>With Me</span></h2>
+        <div style="max-width: 700px; margin: 0 auto; background: var(--bg-card); padding: 50px; border-radius: 10px; border: 1px solid #222;">
+            <form id="lordPunitForm">
+                <input type="text" id="senderName" placeholder="Full Name" style="width:100%; padding:20px; background:#000; border:1px solid #222; color:#fff; margin-bottom:20px; outline:none;" required>
+                <input type="email" id="senderEmail" placeholder="Email Address" style="width:100%; padding:20px; background:#000; border:1px solid #222; color:#fff; margin-bottom:20px; outline:none;" required>
+                <textarea id="senderMsg" rows="5" placeholder="Project Details" style="width:100%; padding:20px; background:#000; border:1px solid #222; color:#fff; margin-bottom:20px; outline:none;" required></textarea>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Execute Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="enter-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0a0a0a; z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
+    <img src="logo.jpg" style="width: 120px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--primary-green));">
+    <h2 style="font-family: 'Oswald'; color: #fff; letter-spacing: 3px;">CLICK TO ENTER</h2>
+    <p style="color: var(--primary-green); font-size: 0.7rem; margin-top: 10px; font-weight: bold;">[ MUSIC WILL ENABLE ]</p>
+</div>
+
+<div id="music-control" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; display: none;">
+    <button onclick="toggleMute()" id="mute-btn" style="background: rgba(0,0,0,0.8); border: 1px solid var(--primary-green); color: var(--primary-green); padding: 12px; border-radius: 50%; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow-shadow);">
+        <i id="mute-icon" class="fas fa-volume-up"></i>
+    </button>
+</div>
+
+<audio id="bg-music" loop>
+    <source src="ReelAudio-33862.mp3" type="audio/mpeg">
+</audio>
+
+    <footer>
+        <div class="socials">
+            <a href="https://youtube.com/@lord_punit_297"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/lord_punit_official/"><i class="fab fa-instagram"></i></a>
+            <a href="https://discord.gg/7SwrAJDxWF"><i class="fab fa-discord"></i></a>
+        </div>
+        <p style="color: var(--text-gray); font-size: 0.9rem;">&copy; 2026 LORD PUNIT | All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- Particles System ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 1.5; this.speedY = Math.random() * 0.5 + 0.2; }
+            update() { this.y += this.speedY; if (this.y > canvas.height) this.y = 0; }
+            draw() { ctx.fillStyle = 'rgba(255, 215, 0, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        function populate() { for(let i=0; i<100; i++) particles.push(new Particle()); }
+        function animate() { ctx.clearRect(0,0,canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        init(); populate(); animate();
+
+        // --- Reveal System ---
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+            });
+        });
+
+        // --- Music Logic ---
+        const music = document.getElementById('bg-music');
+        const overlay = document.getElementById('enter-overlay');
+        overlay.addEventListener('click', () => {
+            music.play();
+            overlay.style.display = 'none';
+            document.getElementById('music-control').style.display = 'block';
+        });
+        function toggleMute() {
+            music.muted = !music.muted;
+            document.getElementById('mute-icon').className = music.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+        }
+
+        // --- GMAIL REDIRECT LOGIC ---
+        document.getElementById('lordPunitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('senderName').value;
+            const email = document.getElementById('senderEmail').value;
+            const msg = document.getElementById('senderMsg').value;
+            
+            const subject = encodeURIComponent(`Inquiry: ${name} (Lord Punit Site)`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nProject Details:\n${msg}`);
+            
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=p297gandhi@gmail.com&su=${subject}&body=${body}`, '_blank');
+        });
+    </script>
+</body>
+</html>
