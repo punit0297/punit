@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LORD PUNIT | Creator Agency & Gaming</title>
-    <link rel="icon" type="image/png" href="logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Lexend:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -100,6 +99,7 @@
             background: var(--bg-card); padding: 50px 40px; border: 1px solid #111;
             transition: var(--transition); border-radius: 4px; position: relative; overflow: hidden;
             backdrop-filter: blur(10px);
+            text-decoration: none; color: inherit; display: block;
         }
         .card:hover { transform: translateY(-20px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
         .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 25px; display: block; }
@@ -177,12 +177,14 @@
     <section id="projects" class="reveal">
         <h2 class="section-title">Core <span>Projects</span></h2>
         <div class="project-grid">
-            <div class="card">
+            <a href="https://vireon-self.vercel.app/" target="_blank" class="card">
                 <span class="tag">CREATOR AGENCY</span>
                 <i class="fas fa-users-viewfinder"></i>
                 <h3>Vireon Agency</h3>
                 <p>Expert management and brand strategy for digital creators. We help talent scale their influence and professionalize their business model through dedicated support.</p>
-            </div>
+                <p style="margin-top: 20px; color: var(--accent); font-weight: bold; font-size: 0.8rem; text-transform: uppercase;">Visit Agency <i class="fas fa-arrow-right" style="font-size: 0.8rem; display: inline; margin-left: 5px;"></i></p>
+            </a>
+
             <div class="card">
                 <span class="tag">GAMING NETWORK</span>
                 <i class="fas fa-server"></i>
@@ -233,15 +235,14 @@
     <footer>
         <div class="socials">
             <a href="https://youtube.com/@lord_punit_297"><i class="fab fa-youtube"></i></a>
-            <a href="https://www.instagram.com/lord_punit_official/"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/lord_punit_official/" title="Official"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/_punit_gandhi_/" title="Private"><i class="fab fa-instagram"></i></a>
             <a href="https://discord.gg/7SwrAJDxWF"><i class="fab fa-discord"></i></a>
-            <a href="https://www.instagram.com/_punit_gandhi_/"><i class="fab fa-instagram"></i></a>
         </div>
         <p style="color: var(--text-dim); font-size: 0.9rem;">&copy; 2026 LORD PUNIT | All Rights Reserved.</p>
     </footer>
 
     <script>
-        // --- Vanta Background Init ---
         VANTA.NET({
             el: "#vanta-canvas",
             mouseControls: true,
@@ -258,14 +259,12 @@
             spacing: 16.00
         });
 
-        // --- Reveal System ---
         window.addEventListener('scroll', () => {
             document.querySelectorAll('.reveal').forEach(el => {
                 if(el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
             });
         });
 
-        // --- Music & Overlay Logic ---
         const music = document.getElementById('bg-music');
         const overlay = document.getElementById('enter-overlay');
         const control = document.getElementById('music-control');
@@ -284,7 +283,6 @@
             document.getElementById('mute-icon').className = music.muted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
         }
 
-        // --- Gmail Redirect Logic ---
         document.getElementById('lordPunitForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('senderName').value;
@@ -299,5 +297,3 @@
     </script>
 </body>
 </html>
-
-
